@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Kho Hàng</title>
+    <title>재고 관리</title>
     <style>
-        /* CSS giữ nguyên từ file gốc */
+        /* CSS는 원본 파일에서 유지 */
         * {
             margin: 0;
             padding: 0;
@@ -144,37 +144,37 @@
 </head>
 <body>
     <div class="container">
-        <h1>Quản Lý Kho Hàng</h1>
+        <h1>재고 관리</h1>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="productName">Tên Sản Phẩm</label>
-                <input type="text" id="productName" placeholder="Nhập tên sản phẩm">
+                <label for="productName">상품 이름</label>
+                <input type="text" id="productName" placeholder="상품 이름을 입력하세요">
             </div>
             <div class="form-group">
-                <label for="productCode">Mã Hàng</label>
-                <input type="text" id="productCode" placeholder="Nhập mã hàng">
+                <label for="productCode">상품 코드</label>
+                <input type="text" id="productCode" placeholder="상품 코드를 입력하세요">
             </div>
             <div class="form-group">
-                <label for="productQuantity">Số Lượng</label>
-                <input type="number" id="productQuantity" placeholder="Nhập số lượng" min="1">
+                <label for="productQuantity">수량</label>
+                <input type="number" id="productQuantity" placeholder="수량을 입력하세요" min="1">
             </div>
         </div>
 
         <div class="button-group">
-            <button class="btn btn-primary" onclick="addProduct()">Thêm Sản Phẩm</button>
-            <button class="btn btn-secondary" onclick="exportData()">Xuất Dữ Liệu</button>
+            <button class="btn btn-primary" onclick="addProduct()">상품 추가</button>
+            <button class="btn btn-secondary" onclick="exportData()">데이터 내보내기</button>
             <input type="file" id="importFile" style="display: none;" onchange="importData(event)">
-            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Nhập Dữ Liệu</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">데이터 가져오기</button>
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <th>Tên Sản Phẩm</th>
-                    <th>Mã Hàng</th>
-                    <th>Tổng Số Lượng</th>
-                    <th>Thao Tác</th>
+                    <th>상품 이름</th>
+                    <th>상품 코드</th>
+                    <th>총 수량</th>
+                    <th>작업</th>
                 </tr>
             </thead>
             <tbody id="productTableBody"></tbody>
@@ -194,7 +194,7 @@
             const productQuantity = parseInt(document.getElementById('productQuantity').value.trim(), 10);
 
             if (!productName || isNaN(productQuantity) || productQuantity <= 0) {
-                alert('Vui lòng nhập đầy đủ thông tin và số lượng phải lớn hơn 0!');
+                alert('모든 정보를 입력하고 수량이 0보다 커야 합니다!');
                 return;
             }
 
@@ -224,7 +224,7 @@
 
         function exportData() {
             if (products.length === 0) {
-                alert('Không có dữ liệu để xuất!');
+                alert('내보낼 데이터가 없습니다!');
                 return;
             }
 
@@ -234,7 +234,7 @@
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'du-lieu-kho-hang.json';
+            a.download = '재고-데이터.json';
             a.click();
 
             URL.revokeObjectURL(url);
@@ -243,7 +243,7 @@
         function importData(event) {
             const file = event.target.files[0];
             if (!file) {
-                alert('Vui lòng chọn một file!');
+                alert('파일을 선택하세요!');
                 return;
             }
 
@@ -252,7 +252,7 @@
                 try {
                     const importedData = JSON.parse(e.target.result);
                     if (!Array.isArray(importedData)) {
-                        alert('Dữ liệu không hợp lệ! File phải chứa một mảng sản phẩm.');
+                        alert('유효하지 않은 데이터입니다! 파일은 제품 배열을 포함해야 합니다.');
                         return;
                     }
 
@@ -274,9 +274,9 @@
 
                     saveToLocalStorage();
                     renderProducts();
-                    alert('Nhập dữ liệu thành công!');
+                    alert('데이터 가져오기 성공!');
                 } catch (error) {
-                    alert('Có lỗi xảy ra khi đọc file! Vui lòng kiểm tra lại file JSON.');
+                    alert('파일을 읽는 동안 오류가 발생했습니다! JSON 파일을 확인하세요.');
                 }
             };
 
@@ -290,7 +290,7 @@
             if (products.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="4" class="empty-message">Chưa có sản phẩm nào trong kho</td>
+                        <td colspan="4" class="empty-message">창고에 제품이 없습니다</td>
                     </tr>
                 `;
                 return;
@@ -303,8 +303,8 @@
                     <td>${product.code}</td>
                     <td>${product.quantity}</td>
                     <td>
-                        <input type="number" id="decrement-${product.id}" placeholder="Nhập số lượng giảm" min="1">
-                        <button class="btn btn-danger" onclick="confirmDecrement('${product.id}')">Xóa</button>
+                        <input type="number" id="decrement-${product.id}" placeholder="감소할 수량 입력" min="1">
+                        <button class="btn btn-danger" onclick="confirmDecrement('${product.id}')">삭제</button>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -316,14 +316,14 @@
             const decrementValue = parseInt(decrementInput.value.trim(), 10);
 
             if (isNaN(decrementValue) || decrementValue <= 0) {
-                alert('Số lượng giảm phải lớn hơn 0!');
+                alert('감소 수량은 0보다 커야 합니다!');
                 return;
             }
 
             const product = products.find(p => p.id === id);
 
             if (product) {
-                const confirmDelete = confirm(`Bạn có chắc chắn muốn giảm ${decrementValue} sản phẩm không?`);
+                const confirmDelete = confirm(`정말로 ${decrementValue}개의 제품을 감소하시겠습니까?`);
                 if (confirmDelete) {
                     product.quantity -= decrementValue;
 
